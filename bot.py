@@ -1,5 +1,7 @@
 #!/usr/bin/python3.7
 
+""" Made with ♥ by EightSQ (2019) """
+
 import sys
 import requests
 import datetime
