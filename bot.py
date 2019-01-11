@@ -6,10 +6,15 @@ import sys
 import requests
 import datetime
 import locale
+from os import getenv
 
-OPENMENSA_MENSAID = 62
-SLACK_WEBHOOK = 'https://hooks.slack.com/services/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'
-MENSA_LINK = 'https://www.studentenwerk-potsdam.de/mensa-griebnitzsee.html'
+OPENMENSA_MENSAID = getenv('OPENMENSA_MENSAID', 62)
+SLACK_WEBHOOK = getenv('SLACK_WEBHOOK')
+MENSA_LINK = getenv('MENSA_LINK', 'https://www.studentenwerk-potsdam.de/mensa-griebnitzsee.html')
+
+if not SLACK_WEBHOOK:
+    print('no SLACK_WEBHOOK variable provided, aborting', file=sys.stderr)
+    exit(1)
 
 date = datetime.date.today().isoformat()
 locale.setlocale(locale.LC_TIME, "de_DE")
@@ -63,4 +68,6 @@ r = requests.post(SLACK_WEBHOOK, json=payload)
 if r.status_code != 200:
     print(f'msg to slack unsuccessful: {r.status_code}', file=sys.stderr)
     exit(1)
+else:
+    print('successfully sent message to slack')
 
