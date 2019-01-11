@@ -12,7 +12,7 @@ SLACK_WEBHOOK = 'https://hooks.slack.com/services/T7677B0R1/BFA9XUE8Y/7FFaq76PnR
 MENSA_LINK = 'https://www.studentenwerk-potsdam.de/mensa-griebnitzsee.html'
 
 date = datetime.date.today().isoformat()
-locale.setlocale(locale.LC_TIME, "German")
+locale.setlocale(locale.LC_TIME, "de_DE")
 
 r = requests.get(f'https://openmensa.org/api/v2/canteens/{OPENMENSA_MENSAID}/days/{date}/meals')
 if r.status_code != 200:
