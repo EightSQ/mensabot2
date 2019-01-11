@@ -5,7 +5,6 @@
 import sys
 import requests
 import datetime
-import locale
 from os import getenv
 
 OPENMENSA_MENSAID = getenv('OPENMENSA_MENSAID', 62)
@@ -17,7 +16,6 @@ if not SLACK_WEBHOOK:
     exit(1)
 
 date = datetime.date.today().isoformat()
-locale.setlocale(locale.LC_TIME, "de_DE")
 
 r = requests.get(f'https://openmensa.org/api/v2/canteens/{OPENMENSA_MENSAID}/days/{date}/meals')
 if r.status_code != 200:
@@ -27,7 +25,13 @@ data = r.json()
 
 payload = {}
 
-payload["text"] = f'Speiseplan für {datetime.date.today().strftime("%A, den %d. %B %Y")}: <{MENSA_LINK}|Online anzeigen>'
+WEEKDAYS = ['Montag', 'Dienstag', 'Mittwoch', 'Donnerstag', 'Freitag', 'Samstag', 'Sonntag']
+MONTHS = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'Dezember']
+date_string =	WEEKDAYS[datetime.date.today().weekday()]\
+                + datetime.date.today().strftime(', den %d. ')\
+                + MONTHS[datetime.date.today().month - 1]\
+                + datetime.date.today().strftime(' %Y')
+payload["text"] = f'Speiseplan für {date_string}: <{MENSA_LINK}|Online anzeigen>'
 
 payload["attachments"] = []
 payload["attachments"].append({})
